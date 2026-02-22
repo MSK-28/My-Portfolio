@@ -115,7 +115,7 @@ export default function Portfolio() {
 
       {/* ── NAVBAR ── */}
       <nav className="navbar">
-        <div className="nav-logo">SKK</div>
+        <div className="nav-logo">MSK</div>
         <div className="nav-right">
           <ul className="nav-links">
             {NAV_LINKS.map((id) => (
