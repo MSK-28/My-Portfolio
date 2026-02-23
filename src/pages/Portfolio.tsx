@@ -13,12 +13,42 @@ const INFO_ITEMS = [
 ];
 
 const SKILLS = [
-  { category: "Languages", tags: ["Java", "Python", "TypeScript", "JavaScript", "C"] },
-  { category: "Frontend", tags: ["React.js", "Next.js", "HTML", "CSS", "Tailwind CSS", "Bootstrap"] },
-  { category: "Backend", tags: ["Node.js", "Express.js", "Django", "FastAPI"] },
-  { category: "Databases", tags: ["MySQL", "MongoDB", "PostgreSQL"] },
-  { category: "DevOps & Cloud", tags: ["AWS", "Docker", "Git", "CI/CD"] },
-  { category: "Tools & Platforms", tags: ["Firebase", "Vercel", "REST APIs", "Redux"] },
+  {
+    icon: "</>",
+    color: "#00d4ff",
+    category: "Frontend Development",
+    tags: ["HTML5", "CSS3", "JavaScript", "Next.js", "React", "TypeScript", "Tailwind CSS", "Bootstrap", "Responsive Web Design"],
+  },
+  {
+    icon: "🗄",
+    color: "#a78bfa",
+    category: "Backend Development",
+    tags: ["Python (FastAPI, Flask, Django)", "Node.js", "Java (OOP, APIs)", "C", "C++", "C#", "PHP", "REST APIs", "Progress OpenEdge ABL"],
+  },
+  {
+    icon: "🧠",
+    color: "#f472b6",
+    category: "AI & ML Technologies",
+    tags: ["Scikit-learn", "Pandas", "NumPy", "NLP", "Sentiment Analysis", "LLMs (Mistral, ChatGPT)", "Generative AI", "TensorFlow", "XGBoost", "Time Series Forecasting"],
+  },
+  {
+    icon: "🗃",
+    color: "#60a5fa",
+    category: "Data & Visualization",
+    tags: ["SQL", "MySQL", "PostgreSQL", "Jupyter", "Google Colab", "Power BI", "Tableau", "Google Suite", "MS 365"],
+  },
+  {
+    icon: "⚙",
+    color: "#fb923c",
+    category: "Dev Tools & Workflow",
+    tags: ["Git & GitHub", "TortoiseSVN", "VS Code", "Postman", "Linux/Unix", "Agile", "Scrum", "Docker"],
+  },
+  {
+    icon: "🚀",
+    color: "#facc15",
+    category: "Deployment & Platforms",
+    tags: ["Firebase", "AWS & EC2", "Vercel", "Unity (Game Dev)", "Anaconda", "Visual Studio", "Canva", "Adobe Photoshop"],
+  },
 ];
 
 const PROJECTS = [
@@ -68,6 +98,13 @@ const CONTACT_LINKS = [
   { icon: "📍", label: "New Jersey, NJ 07306", href: "#" },
 ];
 
+const PHOTOS = [
+  "/photo1.jpg",
+  "/photo2.jpg",
+  "/photo3.jpg",
+  "/photo4.jpg",
+];
+
 // ── SCROLL HELPER ─────────────────────────────────────────────
 const scrollTo = (id: string) => {
   const el = document.getElementById(id);
@@ -79,6 +116,16 @@ export default function Portfolio() {
   const [isLight, setIsLight] = useState(
     () => localStorage.getItem("theme") === "light"
   );
+
+  const [currentPhoto, setCurrentPhoto] = useState(0);
+
+  // Auto-advance slideshow every 3 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentPhoto((prev) => (prev + 1) % PHOTOS.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Apply light class to BOTH html (for body/bg) and kept in state for root div
   useEffect(() => {
@@ -115,7 +162,7 @@ export default function Portfolio() {
 
       {/* ── NAVBAR ── */}
       <nav className="navbar">
-        <div className="nav-logo">MSK</div>
+        <div className="nav-logo">SKK</div>
         <div className="nav-right">
           <ul className="nav-links">
             {NAV_LINKS.map((id) => (
@@ -176,17 +223,42 @@ export default function Portfolio() {
               <p>I'm a <strong>full-stack Software Developer</strong> with a Master's in Computer Science from <strong>Pace University</strong> (GPA 3.9, Dec 2025) and a strong foundation in building responsive, performant web applications.</p>
               <p>My passion lies in crafting <strong>user-focused solutions</strong> that are clean, scalable, and built on modern cloud infrastructure. From ideation to deployment, I care about every layer of the stack.</p>
               <p>I'm experienced in <strong>Agile environments</strong>, collaborating closely with clients and teams to deliver high-quality solutions on time — whether integrating REST APIs, designing schemas, or deploying on AWS with Docker.</p>
-            </div>
-            <div className="about-info">
-              {INFO_ITEMS.map((item) => (
-                <div className="info-card" key={item.label}>
-                  <div className="info-icon">{item.icon}</div>
-                  <div>
-                    <div className="info-label">{item.label}</div>
-                    <div className="info-value">{item.value}</div>
+
+              <div className="info-cards-row">
+                {INFO_ITEMS.map((item) => (
+                  <div className="info-card" key={item.label}>
+                    <div className="info-icon">{item.icon}</div>
+                    <div>
+                      <div className="info-label">{item.label}</div>
+                      <div className="info-value">{item.value}</div>
+                    </div>
                   </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Slideshow */}
+            <div className="slideshow">
+              <div className="slideshow-frame">
+                {PHOTOS.map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt={`Sai photo ${i + 1}`}
+                    className={`slide-img ${i === currentPhoto ? "slide-active" : ""}`}
+                  />
+                ))}
+                {/* Dots */}
+                <div className="slide-dots">
+                  {PHOTOS.map((_, i) => (
+                    <button
+                      key={i}
+                      className={`slide-dot ${i === currentPhoto ? "slide-dot--active" : ""}`}
+                      onClick={() => setCurrentPhoto(i)}
+                    />
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
@@ -200,7 +272,10 @@ export default function Portfolio() {
           <div className="skills-grid">
             {SKILLS.map((group) => (
               <div className="skill-card" key={group.category}>
-                <div className="skill-cat">{group.category}</div>
+                <div className="skill-cat" style={{ color: group.color }}>
+                  <span className="skill-icon">{group.icon}</span>
+                  {group.category}
+                </div>
                 <div className="skill-tags">
                   {group.tags.map((tag) => (
                     <span className="skill-tag" key={tag}>{tag}</span>
